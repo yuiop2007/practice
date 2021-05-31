@@ -32,6 +32,14 @@
     	msg = val + " 님 로그아웃 되셨습니다.";
     else if(msg == "levelCheckOk")
     	msg = "등급이 변경되었습니다.";
+    else if(msg == "mUpdateOk")
+    	msg = "회원정보가 변경되었습니다.";
+    else if(msg == "mUpdateNo")
+    	msg = "회원정보가 변경되지 않았습니다.";
+    else if(msg == "mDeleteOk")
+    	msg = "탈퇴처리 되셨습니다.";
+    else if(msg == "mDeleteNo")
+    	msg = "탈퇴처리 실패~~~";
     
     
     

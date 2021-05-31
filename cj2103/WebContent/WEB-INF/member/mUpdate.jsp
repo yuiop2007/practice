@@ -21,8 +21,14 @@
     		myform.nickName.focus();
     	}
     	else {
-    		nickCheckOn = 1;
-    		window.open(url,"nWin","width=500px,height=250px");
+    		if(nickName != "${snickname}") {
+	    		nickCheckOn = 1;
+	    		window.open(url,"nWin","width=500px,height=250px");
+    		}
+    		else {
+    			alert("기존 닉네임과 동일합니다.");
+	    		nickCheckOn = 1;
+    		}
     	}
     }
     
@@ -51,12 +57,17 @@
     	}
     	// 기타 추가 체크해야 할 항목들을 모두 체크한다.
     	else {
-    		if(nickCheckOn == 1) {
-    			myform.submit();
-    		}
-    		else {
-  				alert("닉네임 체크버튼을 눌러주세요!");
-    		}
+				if(nickName	!= "${vo.nickName}") {
+	    		if(nickCheckOn == 1) {
+	    			myform.submit();
+	    		}
+	    		else {
+	  				alert("닉네임 체크버튼을 눌러주세요!");
+	    		}
+				}
+				else {
+					myform.submit();
+				}
     	}
     }
     
@@ -70,7 +81,7 @@
 <%@ include file="/include/nav.jsp" %>
 <div class="container">
   <p><br/></p>
-  <form name="myform" method="post" action="<%=request.getContextPath()%>/joinOk.mem" class="was-validated">
+  <form name="myform" method="post" action="<%=request.getContextPath()%>/mUpdateOk.mem" class="was-validated">
     <h2>회원 정보 수정</h2>
     <div class="form-group">
       <label for="mid">아이디 : &nbsp; &nbsp;</label><b>${vo.mid}</b>
@@ -167,47 +178,26 @@
         <option>기타</option>
       </select>
     </div>
+    <c:set var="hobby" value='<%=new String[]{"등산","낚시","수영","독서","영화감상","바둑","축구","기타"} %>'/>
+    <c:set var="hobbys" value="${fn:split(vo.hobby,'/')}"/>
     <div class="form-group">
       <div class="form-check-inline">
         <span class="input-group-text">취미 :</span> &nbsp; &nbsp;
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="등산" name="hobby"/>등산
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="낚시" name="hobby"/>낚시
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="수영" name="hobby"/>수영
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="독서" name="hobby"/>독서
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="영화감상" name="hobby"/>영화감상
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="바둑" name="hobby"/>바둑
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="축구" name="hobby"/>축구
-			  </label>
-			</div>
-			<div class="form-check-inline">
-			  <label class="form-check-label">
-			    <input type="checkbox" class="form-check-input" value="기타" name="hobby" checked/>기타
-			  </label>
+        <c:forEach var="i" items="${hobby}">
+          <c:set var="sw" value="0"/>
+          <c:set var="flag" value="false"/>
+        	<c:forEach var="j" items="${hobbys}">
+        	  <c:if test="${not flag}">
+	        	  <c:if test="${i == j}">
+	        	    <c:set var="sw" value="1"/>
+	        	    <c:set var="flag" value="true"/>
+							</c:if>
+						</c:if>
+					</c:forEach>
+				  <label class="form-check-label">
+				    <input type="checkbox" class="form-check-input" value="${i}" name="hobby" <c:if test="${sw==1}">checked</c:if>/>${i} &nbsp;&nbsp;
+				  </label>
+			  </c:forEach>
 			</div>
     </div>
     <div class="form-group">
@@ -227,6 +217,7 @@
     <button type="reset" class="btn btn-secondary">다시작성</button>
     <button type="button" class="btn btn-secondary" onclick="location.href='<%=request.getContextPath()%>/memberMain.mem';">돌아가기</button>
     <input type="hidden" name="mid" value="${vo.mid}"/>
+    <input type="hidden" name="pwdKey" value="${vo.pwdKey}"/>
   </form>
   <p><br/></p>
 </div>

@@ -16,7 +16,7 @@ create table member (
   job		  varchar(20),									/* 직업 */
   hobby	  varchar(50),									/* 취미 */
   userInfor char(6) default '공개',			/* 회원 정보 공개여부 */
-  userDel   char(2) default 'NO',				/* 회원 탈퇴신청 여부(Ok:탈퇴신청한회원, NO:현재 가입중인회원) */
+  userDel   char(2) default 'NO',				/* 회원 탈퇴신청 여부(OK:탈퇴신청한회원, NO:현재 가입중인회원) */
   level			int default 1,							/* 0:관리자, 1:준회원, 2:정회원, 3:우수회원 */
   visitCnt  int default 0,							/* 방문횟수 */
   startDate datetime default now(),			/* 최초 가입일 */

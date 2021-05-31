@@ -1,14 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
   int level = session.getAttribute("slevel")==null ? 99 : (int) session.getAttribute("slevel");
+
+	//String atom = request.getParameter("atom");
 %>
 <style>
   .navbar-nav > a {color:#ccc !important;}
   .navbar-nav  a:hover {color:#fff !important; background-color:#aaa;}
 </style>
+<script>
+  function mDelete() {
+	  var ans = confirm("탈퇴 하시겠습니까?");
+	  if(ans) {
+		  var ans2 = confirm("탈퇴후 1개월동안은 같은 아이디로 가입하실 수 없습니다.\n탈퇴를 계속 진행하시겠습니까?");
+		  if(ans2) {
+			  location.href="<%=request.getContextPath()%>/mDelete.mem";
+		  }
+	  }
+  }
+</script>
 <div class="jumbotron text-center" style="margin-bottom:0; padding:20px 0;">
   <h1>cj2103 Web Project</h1>
-  <p>본 사이트는 반응형으로 제작되었습니다.</p> 
+  <p>본 사이트는 반응형으로 제작되었습니다.<%-- (<%//=atom %>:${param.atom}) --%></p> 
 </div>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <a class="navbar-brand" href="<%=request.getContextPath()%>/">HOME</a>
@@ -38,7 +51,7 @@
 	        		<a class="dropdown-item" href="<%=request.getContextPath()%>/aMList.ad">회원리스트</a>
 <%          } %>
 <%        if(level != 0) { %>
-	          <a class="dropdown-item" href="<%=request.getContextPath()%>/mDelete.mem">회원탈퇴</a>
+	          <a class="dropdown-item" href="javascript:mDelete()">회원탈퇴</a>
 <%        } %>
 <%        if(level == 0) { %>
 	          <a class="dropdown-item" href="<%=request.getContextPath()%>/aMain.ad">관리자</a>

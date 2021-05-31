@@ -30,7 +30,7 @@ public class MUpdateCommand implements MInterface {
 		}
 		vo.setPwd(String.valueOf(result));
 		
-		System.out.println("vo : " + vo);
+		//System.out.println("vo : " + vo);
 		
 		request.setAttribute("vo", vo);
 	}
