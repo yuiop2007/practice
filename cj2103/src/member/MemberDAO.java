@@ -143,13 +143,22 @@ public class MemberDAO {
 	}
 
 	// 전체 리스트 검색
-	public List<MemberVO> aMList(int startIndexNo, int pageSize) {
+	public List<MemberVO> aMList(int startIndexNo, int pageSize, String strLevel) {
 		List<MemberVO> vos = new ArrayList<MemberVO>();
 		try {
-			sql = "select * from member order by idx desc limit ?, ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, startIndexNo);
-			pstmt.setInt(2, pageSize);
+			if(strLevel.equals("")) {
+				sql = "select * from member order by idx desc limit ?, ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, startIndexNo);
+				pstmt.setInt(2, pageSize);
+			}
+			else {
+				sql = "select * from member where level = ? order by idx desc limit ?, ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(strLevel));
+				pstmt.setInt(2, startIndexNo);
+				pstmt.setInt(3, pageSize);
+			}
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -186,11 +195,19 @@ public class MemberDAO {
 	}
 
 	// 총 레코드 건수
-	public int totRecCnt() {
+	public int totRecCnt(String strLevel) {
 		int res = 0;
 		try {
-			sql = "select count(*) from member";
-			pstmt = conn.prepareStatement(sql);
+			if(strLevel.equals("")) {
+				sql = "select count(*) from member";
+				pstmt = conn.prepareStatement(sql);
+			}
+			else {
+				sql = "select count(*) from member where level = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, Integer.parseInt(strLevel));
+			}
+			
 			rs = pstmt.executeQuery();
 			if(rs.next()) res = rs.getInt(1); 
 		} catch (SQLException e) {
@@ -338,5 +355,39 @@ public class MemberDAO {
 			getConn.pstmtClose();
 		}
 		return res;
+	}
+
+	// 삭제신청 인원수...
+	public int delMemberCount() {
+		int delMemberCount = 0;
+		try {
+			sql = "select count(*) from member where userDel = 'OK'";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			rs.next();
+			delMemberCount = rs.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("SQL 에러 : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return delMemberCount;
+	}
+
+	// 신규회원(준회원) 인원수 가져오기
+	public int newMemberCount() {
+		int newMemberCount = 0;
+		try {
+			sql = "select count(*) from member where level = 1";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			rs.next();
+			newMemberCount = rs.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("SQL 에러 : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return newMemberCount;
 	}
 }

@@ -11,6 +11,11 @@
     function levelCheck() {
     	alert("회원정보를 변경하시려면, '정보변경'버튼을 클릭하세요...");
     }
+    
+    function levelSearch() {
+    	var level = adminForm.level.value;
+    	location.href = "${ctp}/aMList.ad?level="+level;
+    }
   </script>
 </head>
 <body>
@@ -20,6 +25,17 @@
 <div class="container">
   <p><br/></p>
   <h2>회 원 리 스 트</h2>
+  <div style="text-align:right;padding:15px 0px;">
+    <form name="adminForm">
+      회원등급
+      <select name="level" onchange="levelSearch()">
+      	<option value="" <c:if test="${empty stringLevel}">selected</c:if>>전체회원</option>
+      	<option value="1" <c:if test="${stringLevel=='1'}">selected</c:if>>준회원</option>
+      	<option value="2" <c:if test="${stringLevel=='2'}">selected</c:if>>정회원</option>
+      	<option value="3" <c:if test="${stringLevel=='3'}">selected</c:if>>우수회원</option>
+      </select>
+    </form>
+  </div>
   <table class="table table-hover">
     <tr class="table-dark text-dark">
       <th>번호</th>
@@ -76,11 +92,11 @@
   </table>
   <!-- 페이징처리 시작 -->
 	<div style="text-align:center">
-	 <c:if test="${pag != 1}">[<a href="${ctp}/aMList.ad?pag=1">1페이지</a>]....</c:if>
-	 <c:if test="${pag > 1}">[<a href="${ctp}/aMList.ad?pag=${pag-1}">이전페이지</a>]</c:if>
+	 <c:if test="${pag != 1}">[<a href="${ctp}/aMList.ad?pag=1&level=${stringLevel}">1페이지</a>]....</c:if>
+	 <c:if test="${pag > 1}">[<a href="${ctp}/aMList.ad?pag=${pag-1}&level=${stringLevel}">이전페이지</a>]</c:if>
 	 ${pag}Page / ${totPage}Pages
-	 <c:if test="${pag < totPage}">[<a href="${ctp}/aMList.ad?pag=${pag+1}">다음페이지</a>]</c:if>
-	 <c:if test="${pag != totPage}">....[<a href="${ctp}/aMList.ad?pag=${totPage}">마지막페이지</a>]</c:if>
+	 <c:if test="${pag < totPage}">[<a href="${ctp}/aMList.ad?pag=${pag+1}&level=${stringLevel}">다음페이지</a>]</c:if>
+	 <c:if test="${pag != totPage}">....[<a href="${ctp}/aMList.ad?pag=${totPage}&level=${stringLevel}">마지막페이지</a>]</c:if>
 	</div>
 	<!-- 페이징처리 끝 -->
 </div>

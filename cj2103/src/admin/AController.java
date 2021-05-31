@@ -34,6 +34,8 @@ public class AController extends HttpServlet {
 			viewPage = "/WEB-INF/admin/aMenu.jsp";
 		}
 		else if(com.equals("/aContent")) {
+			command = new AContentCommand();
+			command.execute(request, response);
 			viewPage = "/WEB-INF/admin/aContent.jsp";
 		}
 		else if(com.equals("/aOut")) {
