@@ -40,6 +40,10 @@
     	msg = "탈퇴처리 되셨습니다.";
     else if(msg == "mDeleteNo")
     	msg = "탈퇴처리 실패~~~";
+    else if(msg == "bInputOk")
+    	msg = "게시글을 등록하였습니다.";
+    else if(msg == "bInputNo")
+    	msg = "게시글 등록에 실패하였습니다.";
     
     
     

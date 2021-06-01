@@ -12,11 +12,27 @@
     	alert("회원정보를 변경하시려면, '정보변경'버튼을 클릭하세요...");
     }
     
+    // 레벨별 검색처리
     function levelSearch() {
     	var level = adminForm.level.value;
     	location.href = "${ctp}/aMList.ad?level="+level;
     }
+    
+    // 개별 아이디 검색
+    function midSearch() {
+    	var mid = adminForm.mid.value;
+    	if(mid == "") {
+    		alert("아이디를 입력하세요.");
+    		adminForm.mid.focus();
+    	}
+    	else {
+    		location.href="${ctp}/mUpdate.mem?sw=s&mid="+mid;
+    	}
+    }
   </script>
+  <style>
+    th, td {text-align: center;}
+  </style>
 </head>
 <body>
 <%-- <% if(mlevel != 0) { %><%@ include file="/include/nav.jsp" %><% } %> --%>
@@ -25,15 +41,26 @@
 <div class="container">
   <p><br/></p>
   <h2>회 원 리 스 트</h2>
-  <div style="text-align:right;padding:15px 0px;">
+  <div style="padding:10px 0px;">
     <form name="adminForm">
-      회원등급
-      <select name="level" onchange="levelSearch()">
-      	<option value="" <c:if test="${empty stringLevel}">selected</c:if>>전체회원</option>
-      	<option value="1" <c:if test="${stringLevel=='1'}">selected</c:if>>준회원</option>
-      	<option value="2" <c:if test="${stringLevel=='2'}">selected</c:if>>정회원</option>
-      	<option value="3" <c:if test="${stringLevel=='3'}">selected</c:if>>우수회원</option>
-      </select>
+      <table class="table table-borderless" style="width:100%;text-align:left;margin:0px;padding:0px;">
+        <tr>
+          <td>
+            <input type="text" name="mid" placeholder="검색할아이디입력"/>
+            <input type="button" value="개별검색" onclick="midSearch()"/>
+            <input type="button" value="전체검색" onclick="location.href='${ctp}/aMList.ad';"/>
+          </td>
+          <td style="text-align:right">
+			      회원등급
+			      <select name="level" onchange="levelSearch()">
+			      	<option value="" <c:if test="${empty stringLevel}">selected</c:if>>전체회원</option>
+			      	<option value="1" <c:if test="${stringLevel=='1'}">selected</c:if>>준회원</option>
+			      	<option value="2" <c:if test="${stringLevel=='2'}">selected</c:if>>정회원</option>
+			      	<option value="3" <c:if test="${stringLevel=='3'}">selected</c:if>>우수회원</option>
+			      </select>
+			    </td>
+	      </tr>
+      </table>
     </form>
   </div>
   <table class="table table-hover">
@@ -60,15 +87,18 @@
       </c:choose>
 	    <tr>
 	      <td>${curScrStartNo}</td>
-	      <td>${vo.mid}</td>
+	      <td>
+	        <c:if test="${vo.userInfor == '공개'}">${vo.mid}</c:if>
+	        <c:if test="${vo.userInfor != '공개'}">비공개</c:if>
+	      </td>
 	      <td>
 	        <c:if test="${slevel == 0}"><a href="${ctp}/aMInfor.ad?mid=${vo.mid}">${vo.nickName}</a></c:if>
 	        <c:if test="${slevel != 0}">${vo.nickName}</c:if>
 	      </td>
-	      <td>${vo.name}</td>
-	      <td>${vo.gender}</td>
-	      <td>${vo.visitCnt}</td>
-	      <td>${vo.lastDate}</td>
+	      <td>${vo.userInfor=='공개' ? vo.name : '비공개'}</td>
+	      <td>${vo.userInfor=='공개' ? vo.gender : '비공개'}</td>
+	      <td>${vo.userInfor=='공개' ? vo.visitCnt : '비공개'}</td>
+	      <td>${vo.userInfor=='공개' ? vo.lastDate : '비공개'}</td>
         <c:if test="${slevel == 0}">
 		      <td>${vo.userInfor}</td>
 		      <td>

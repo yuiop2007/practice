@@ -56,7 +56,12 @@ public class MController extends HttpServlet {
 		else if(com.equals("/mUpdate")) {
 			command = new MUpdateCommand();
 			command.execute(request, response);
-			viewPage = "/WEB-INF/member/mUpdate.jsp";
+			if(request.getParameter("sw").equals("s")) {
+				viewPage = "/WEB-INF/admin/member/aMList.jsp";
+			}
+			else {
+				viewPage = "/WEB-INF/member/mUpdate.jsp";
+			}
 		}
 		else if(com.equals("/mUpdateOk")) {
 			command = new MUpdateOkCommand();

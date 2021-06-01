@@ -207,9 +207,8 @@ public class MemberDAO {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, Integer.parseInt(strLevel));
 			}
-			
 			rs = pstmt.executeQuery();
-			if(rs.next()) res = rs.getInt(1); 
+			if(rs.next()) res = rs.getInt(1);
 		} catch (SQLException e) {
 			System.out.println("SQL 에러 + " + e.getMessage());
 		} finally {
@@ -272,7 +271,8 @@ public class MemberDAO {
 	}
 
 	// 개별자료 검색
-	public MemberVO mSearch(String mid) {
+	public List<MemberVO> mSearch(String mid) {
+		List<MemberVO> vos = new ArrayList<MemberVO>();
 		vo = new MemberVO();
 		try {
 			sql = "select * from member where mid = ?";
@@ -301,12 +301,14 @@ public class MemberDAO {
 			vo.setVisitCnt(rs.getInt("visitCnt"));
 			vo.setStartDate(rs.getString("startDate"));
 			vo.setLastDate(rs.getString("lastDate"));
+			
+			vos.add(vo);
 		} catch (SQLException e) {
 			System.out.println("SQL 에러 + " + e.getMessage());
 		} finally {
 			getConn.rsClose();
 		}
-		return vo;
+		return vos;
 	}
 
 	// 회원 신상정보 수정하기
