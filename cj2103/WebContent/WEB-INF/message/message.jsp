@@ -44,6 +44,12 @@
     	msg = "게시글을 등록하였습니다.";
     else if(msg == "bInputNo")
     	msg = "게시글 등록에 실패하였습니다.";
+    else if(msg == "passCheckNo")
+    	msg = "비밀번호 오류입니다.";
+    else if(msg == "bUpdateOk")
+    	msg = "수정완료!!";
+    else if(msg == "bUpdateNo")
+    	msg = "수정실패~~~";
     
     
     

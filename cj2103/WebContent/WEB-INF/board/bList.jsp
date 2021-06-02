@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -47,11 +48,15 @@
     <c:forEach var="vo" items="${vos}">
 	    <tr>
 	      <td>${curScrStartNo}</td>
-	      <td>
+	      <td style="text-align:left;">
 	        <a href="${ctp}/bContent.bo?idx=${vo.idx}">${vo.title}</a>
+	        <c:if test="${vo.wNdate <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
 	      </td>
 	      <td>${vo.name}</td>
-	      <td>${vo.wDate}</td>
+	      <td>
+	        <c:if test="${vo.wNdate <= 24}">${fn:substring(vo.wDate,11,19)}</c:if>
+	        <c:if test="${vo.wNdate > 24}">${fn:substring(vo.wDate,0,10)}</c:if>
+	      </td>
 	      <td>${vo.readNum}</td>
 	      <td>${vo.good}</td>
 	    </tr>

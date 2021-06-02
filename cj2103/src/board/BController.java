@@ -47,6 +47,28 @@ public class BController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/WEB-INF/board/bContent.jsp";
 		}
+		else if(com.equals("/bGood")) {
+			int idx = Integer.parseInt(request.getParameter("idx"));
+			BoardDAO dao = new BoardDAO();
+			dao.bGood(idx);
+			return;
+		}
+		else if(com.equals("/bUpdate")) {
+			command = new BUpdateCommand();
+			command.execute(request, response);
+			String msg = request.getAttribute("msg")==null ? "" : (String) request.getAttribute("msg");
+			if(!msg.equals("")) {
+				viewPage = "/WEB-INF/message/message.jsp";
+			}
+			else {
+				viewPage = "/WEB-INF/board/bUpdate.jsp";
+			}
+		}
+		else if(com.equals("/bUpdateOk")) {
+			command = new BUpdateOkCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

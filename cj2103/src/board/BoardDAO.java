@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import conn.GetConn;
+import conn.TimeDiff;
 
 public class BoardDAO {
 	GetConn getConn = GetConn.getInstance();
@@ -68,7 +69,13 @@ public class BoardDAO {
 				vo.setTitle(rs.getString("title"));
 				vo.setEmail(rs.getString("email"));
 				vo.setPwd(rs.getString("pwd"));
-				vo.setwDate(rs.getString("wDate"));
+				
+				vo.setwDate(rs.getString("wDate"));   // 날짜필드를 날짜형식 자료
+				vo.setwCdate(rs.getString("wDate"));  // 날짜필드를 문자형식의 자료
+				TimeDiff timeDiff = new TimeDiff();		// 날짜를 시간형식으로 계산하기 위한 메소드 생성
+				int res = timeDiff.timeDiff(vo.getwCdate());  // 시간형식으로계산된 정수값(시간)을 받아온다.
+				vo.setwNdate(res);  // 시간차를 숫자형식으로 저장..
+				
 				vo.setReadNum(rs.getInt("readNum"));
 				vo.setHostIp(rs.getString("hostIp"));
 				vo.setGood(rs.getInt("good"));
@@ -147,6 +154,72 @@ public class BoardDAO {
 			getConn.pstmtClose();
 		}
 		
+	}
+
+	// 좋아요 클릭수 증가처리
+	public void bGood(int idx) {
+		try {
+			sql = "update board set good = good + 1 where idx = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.pstmtClose();
+		}
+	}
+
+	// 비밀번호 체크...
+	public int getPwdCheck(int idx, String pwd) {
+		int res = 0;
+		try {
+			sql = "select idx from board where idx = ? and pwd = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.setString(2, pwd);
+			rs = pstmt.executeQuery();
+			if(rs.next()) res = 1;
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return res;
+	}
+
+	public int bUpdateOk(BoardVO vo, int idx) {
+	  int res = 0;
+	  try {
+	  	if(!vo.getPwd().equals("")) {
+				sql = "update board set name=?,title=?,email=?,pwd=?,hostIp=?,content=? where idx=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getTitle());
+				pstmt.setString(3, vo.getEmail());
+				pstmt.setString(4, vo.getPwd());
+				pstmt.setString(5, vo.getHostIp());
+				pstmt.setString(6, vo.getContent());
+				pstmt.setInt(7, idx);
+	  	}
+	  	else {
+	  		sql = "update board set name=?,title=?,email=?,hostIp=?,content=? where idx=?";
+	  		pstmt = conn.prepareStatement(sql);
+	  		pstmt.setString(1, vo.getName());
+	  		pstmt.setString(2, vo.getTitle());
+	  		pstmt.setString(3, vo.getEmail());
+	  		pstmt.setString(4, vo.getHostIp());
+	  		pstmt.setString(5, vo.getContent());
+	  		pstmt.setInt(6, idx);
+	  	}
+			pstmt.executeUpdate();
+			res = 1;
+	  } catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.pstmtClose();
+		}
+		return res;
 	}
 
 }

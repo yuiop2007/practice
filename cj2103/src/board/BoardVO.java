@@ -12,6 +12,10 @@ public class BoardVO {
 	private int good;
 	private String content;
 	
+	// 날짜형식을 문자/숫자로 저장시키는 변수 선언
+	private String wCdate;
+	private int wNdate;
+	
 	public BoardVO() {}
 	
 	public BoardVO(int idx, String name, String title, String email, String pwd, String wDate, int readNum, String hostIp, int good, String content) {
@@ -87,10 +91,23 @@ public class BoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getwCdate() {
+		return wCdate;
+	}
+	public void setwCdate(String wCdate) {
+		this.wCdate = wCdate;
+	}
+	public int getwNdate() {
+		return wNdate;
+	}
+	public void setwNdate(int wNdate) {
+		this.wNdate = wNdate;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardVO [idx=" + idx + ", name=" + name + ", title=" + title + ", email=" + email + ", pwd=" + pwd
 				+ ", wDate=" + wDate + ", readNum=" + readNum + ", hostIp=" + hostIp + ", good=" + good + ", content=" + content
-				+ "]";
+				+ ", wCdate=" + wCdate + ", wNdate=" + wNdate + "]";
 	}
 }

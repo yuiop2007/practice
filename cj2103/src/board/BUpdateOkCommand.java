@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import conn.SecurityUtil;
 
-public class BInputOkCommand implements BInterface {
+public class BUpdateOkCommand implements BInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,13 +19,17 @@ public class BInputOkCommand implements BInterface {
 		String pwd = request.getParameter("pwd")==null ? "" : request.getParameter("pwd");
 		String hostIp = request.getParameter("hostIp")==null ? "" : request.getParameter("hostIp");
 
+		int idx = Integer.parseInt(request.getParameter("idx"));
+		
 		// title태그는 HTML태그 사용 금지
 		title = title.replace("<", "&lt;");
 		title = title.replace(">", "&gt;");
 		
 		// 비밀번호를 SHA-256
-		SecurityUtil securityUtil = new SecurityUtil();
-		pwd = securityUtil.encryptSHA256(pwd);
+		if(!pwd.equals("")) {
+			SecurityUtil securityUtil = new SecurityUtil();
+			pwd = securityUtil.encryptSHA256(pwd);
+		}
 		
 		BoardVO vo = new BoardVO();
 		vo.setName(name);
@@ -37,16 +41,17 @@ public class BInputOkCommand implements BInterface {
 		
 		BoardDAO dao = new BoardDAO();
 		
-		int res = dao.bInputOk(vo);
+		int res = dao.bUpdateOk(vo, idx);
 		
 		if(res == 1) {
-			request.setAttribute("msg", "bInputOk");
-			request.setAttribute("url", request.getContextPath()+"/bList.bo");
+			request.setAttribute("msg", "bUpdateOk");
+			request.setAttribute("url", request.getContextPath()+"/bContent.bo?idx="+idx);
 		}
 		else {
-			request.setAttribute("msg", "bInputNo");
-			request.setAttribute("url", request.getContextPath()+"/bInput.bo");
+			request.setAttribute("msg", "bUpdateNo");
+			request.setAttribute("url", request.getContextPath()+"/bUpdate.bo?idx="+idx);
 		}
+
 	}
 
 }
