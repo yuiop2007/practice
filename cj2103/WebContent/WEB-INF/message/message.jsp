@@ -50,6 +50,10 @@
     	msg = "수정완료!!";
     else if(msg == "bUpdateNo")
     	msg = "수정실패~~~";
+    else if(msg == "bDeleteOk")
+    	msg = "게시글이 삭제처리 되었습니다.";
+    else if(msg == "bReplyBoardOk")
+    	msg = "댓글이 입력 되었습니다.";
     
     
     

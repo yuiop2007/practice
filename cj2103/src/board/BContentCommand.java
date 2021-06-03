@@ -2,6 +2,7 @@ package board;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,10 @@ public class BContentCommand implements BInterface {
 		
 		BoardVO vo = dao.bContent(idx);
 		
+		List<ReplyBoardVO> rVos = dao.getReply(idx);
+		
 		request.setAttribute("vo", vo);
+		request.setAttribute("rVos", rVos);
 	}
 
 }

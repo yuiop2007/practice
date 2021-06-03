@@ -69,6 +69,16 @@ public class BController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/WEB-INF/message/message.jsp";
 		}
+		else if(com.equals("/bDelete")) {
+			command = new BDeleteCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
+		else if(com.equals("/bReplyInput")) {
+			command = new BReplyInputCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/message/message.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

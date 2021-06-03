@@ -19,18 +19,25 @@ public class BGood4 extends HttpServlet{
 		// 중복 조회수 증가 방지처리
 		// 세션배열 '세션아이디'+'good'+'고유번호'
 		HttpSession session = request.getSession();
-		ArrayList<String> goodIdx = (ArrayList) session.getAttribute("goodIdx");
-		if(goodIdx == null) {
-			goodIdx = new ArrayList<String>();
-			session.setAttribute("goodIdx", goodIdx);
+		ArrayList<String> sgoodIdx = (ArrayList) session.getAttribute("sgoodIdx");
+		if(sgoodIdx == null) {
+			sgoodIdx = new ArrayList<String>();
+			session.setAttribute("sgoodIdx", sgoodIdx);
 		}
 		String imsiGoodIdx = session.getId()+"good"+idx;
-		if(!goodIdx.contains(imsiGoodIdx)) {
-			goodIdx.add(imsiGoodIdx);
+		if(!sgoodIdx.contains(imsiGoodIdx)) {
+			sgoodIdx.add(imsiGoodIdx);
 			
 			BoardDAO dao = new BoardDAO();
 			dao.bGood(idx);
 		}
+		else {
+			response.getWriter().write(goodCount());;
+		}
 		
+	}
+
+	private String goodCount() {
+		return "1";
 	}
 }
