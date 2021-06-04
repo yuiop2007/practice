@@ -18,6 +18,8 @@ public class BUpdateOkCommand implements BInterface {
 		String content = request.getParameter("content")==null ? "" : request.getParameter("content");
 		String pwd = request.getParameter("pwd")==null ? "" : request.getParameter("pwd");
 		String hostIp = request.getParameter("hostIp")==null ? "" : request.getParameter("hostIp");
+		String pag = request.getParameter("pag")==null ? "" : request.getParameter("pag");
+		String pageSize = request.getParameter("pageSize")==null ? "" : request.getParameter("pageSize");
 
 		int idx = Integer.parseInt(request.getParameter("idx"));
 		
@@ -45,11 +47,11 @@ public class BUpdateOkCommand implements BInterface {
 		
 		if(res == 1) {
 			request.setAttribute("msg", "bUpdateOk");
-			request.setAttribute("url", request.getContextPath()+"/bContent.bo?idx="+idx);
+			request.setAttribute("url", request.getContextPath()+"/bContent.bo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize);
 		}
 		else {
 			request.setAttribute("msg", "bUpdateNo");
-			request.setAttribute("url", request.getContextPath()+"/bUpdate.bo?idx="+idx);
+			request.setAttribute("url", request.getContextPath()+"/bUpdate.bo?idx="+idx+"&pag="+pag+"&pageSize="+pageSize);
 		}
 
 	}

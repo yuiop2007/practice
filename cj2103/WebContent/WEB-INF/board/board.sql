@@ -19,6 +19,10 @@ insert into board values (default,'관리맨','게시판 서비스를 시작합�
 
 select * from board;
 
+select * from board where idx = 16;
+select * from board where idx < 16 order by idx desc limit 1;  /* 이전글 */
+select * from board where idx > 16 limit 1;										 /* 다음글 */
+
 ----------------댓글테이블(replyBoard)------------------------------
 
 create table replyBoard(
@@ -36,6 +40,12 @@ create table replyBoard(
 desc replyBoard;
 
 select * from replyBoard order by idx desc;
+
+select count(*) from replyBoard;
+select count(*) from replyBoard where boardIdx = 17;
+
+select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount  from board order by idx desc limit 0, 5;
+
 
 ------- 날짜 함수 연습 ---------------------------------------------------------------
 

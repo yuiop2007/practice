@@ -7,13 +7,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BListCommand implements BInterface {
+public class BSearchCommand implements BInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String search = request.getParameter("search")==null ? "" : request.getParameter("search").trim();
+		String searchString = request.getParameter("searchString")==null ? "" : request.getParameter("searchString").trim();
+		
 		BoardDAO dao = new BoardDAO();
 		
-		// 페이징 처리를 위한 준비
 		int pag = request.getParameter("pag")==null ? 1 : Integer.parseInt(request.getParameter("pag"));
 		int pageSize = request.getParameter("pageSize")==null ? 5 : Integer.parseInt(request.getParameter("pageSize"));
 		int totRecCnt = dao.totRecCnt();
@@ -22,11 +24,17 @@ public class BListCommand implements BInterface {
 	  int curScrStartNo = totRecCnt - startIndexNo;
 	  int blockSize = 3;
 		
-		List<BoardVO> vos = dao.bList(startIndexNo, pageSize);
+		List<BoardVO> vos = dao.getBSearch(search, searchString, startIndexNo, pageSize);
+		
+		if(search.equals("title")) search = "글제목";
+		else if(search.equals("name")) search = "글쓴이";
+		else search = "글내용";
 		
 		request.setAttribute("vos", vos);
+		request.setAttribute("search", search);
+		request.setAttribute("searchString", searchString);
+		request.setAttribute("searchCount", vos.size());
 		
-		// 페이징처리를 위한 저장소 저장하기
 		request.setAttribute("pag", pag);
 		request.setAttribute("pageSize", pageSize);
 		request.setAttribute("totPage", totPage);

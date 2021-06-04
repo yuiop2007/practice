@@ -10,10 +10,10 @@ public class JoinOkCommand implements MInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String mid = request.getParameter("mid")==null ? "" : request.getParameter("mid");
-		String pwd = request.getParameter("pwd")==null ? "" : request.getParameter("pwd");
-		String nickName = request.getParameter("nickName")==null ? "" : request.getParameter("nickName");
-		String name = request.getParameter("name")==null ? "" : request.getParameter("name");
+		String mid = request.getParameter("mid")==null ? "" : request.getParameter("mid").trim();
+		String pwd = request.getParameter("pwd")==null ? "" : request.getParameter("pwd").trim();
+		String nickName = request.getParameter("nickName")==null ? "" : request.getParameter("nickName").trim();
+		String name = request.getParameter("name")==null ? "" : request.getParameter("name").trim();
 		String name_ = name;
 		String gender = request.getParameter("gender");
 		String birthday = request.getParameter("birthday");
@@ -22,12 +22,12 @@ public class JoinOkCommand implements MInterface {
 		String job = request.getParameter("job");
 		String userInfor = request.getParameter("userInfor");
 		
-		String tel1 = request.getParameter("tel1");
-		String tel2 = request.getParameter("tel2")==null ? "" : request.getParameter("tel2");
-		String tel3 = request.getParameter("tel3")==null ? "" : request.getParameter("tel3");
+		String tel1 = request.getParameter("tel1").trim();
+		String tel2 = request.getParameter("tel2")==null ? "" : request.getParameter("tel2").trim().replace(" ", "");   // 23 4 
+		String tel3 = request.getParameter("tel3")==null ? "" : request.getParameter("tel3").trim().replace(" ", "");
 		String tel = tel1 + "-" + tel2 + "-" + tel3;
 		
-		String email1 = request.getParameter("email1")==null ? "" : request.getParameter("email1");
+		String email1 = request.getParameter("email1")==null ? "" : request.getParameter("email1").trim().replace(" ", "");
 		String email2 = request.getParameter("email2");
 		String email = email1 + "@" + email2;
 		

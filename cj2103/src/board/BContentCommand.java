@@ -13,7 +13,9 @@ public class BContentCommand implements BInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int idx = request.getParameter("idx")==null ? 0 : Integer.parseInt(request.getParameter("idx"));
+		int idx = request.getParameter("idx")==null ? 0 : Integer.parseInt(request.getParameter("idx").trim());
+		int pag = request.getParameter("pag")==null ? 0 : Integer.parseInt(request.getParameter("pag").trim());
+		String pageSize = request.getParameter("pageSize")==null ? "" : request.getParameter("pageSize").trim();
 		
 		BoardDAO dao = new BoardDAO();
 		
@@ -34,10 +36,19 @@ public class BContentCommand implements BInterface {
 		
 		BoardVO vo = dao.bContent(idx);
 		
+		// 댓글 읽어오기
 		List<ReplyBoardVO> rVos = dao.getReply(idx);
 		
 		request.setAttribute("vo", vo);
 		request.setAttribute("rVos", rVos);
+		request.setAttribute("pag", pag);
+		request.setAttribute("pageSize", pageSize);
+		
+		// '이전글/다음글' 검색해서 저장소에 담기 처리
+	  BoardVO preVo = dao.preNextSearch("pre", idx);
+	  BoardVO nextVo = dao.preNextSearch("next", idx);
+	  request.setAttribute("preVo", preVo);
+	  request.setAttribute("nextVo", nextVo);
 	}
 
 }

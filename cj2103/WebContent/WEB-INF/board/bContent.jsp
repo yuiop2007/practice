@@ -11,10 +11,8 @@
   <jsp:include page="/include/bs.jsp"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <style>
-    th {
-      text-align: center;
-      background-color: #eee;
-    }
+    th, td {text-align: center;}
+    th {background-color: #eee;}
   </style>
   <script>
     // 좋아요 횟수 증가 처리
@@ -95,7 +93,7 @@
     		myform.pwd.focus();
     	}
     	else {
-    		location.href="${ctp}/bUpdate.bo?idx=${vo.idx}&pwd="+pwd;
+    		location.href="${ctp}/bUpdate.bo?idx=${vo.idx}&pwd="+pwd+"&pag=${pag}&pageSize=${pageSize}";
     	}
     }
     
@@ -111,7 +109,7 @@
         		return false;
         }
     		else {
-    			location.href = "${ctp}/bDelete.bo?idx=${vo.idx}&pwd="+pwd;
+    			location.href = "${ctp}/bDelete.bo?idx=${vo.idx}&pwd="+pwd+"&pag=${pag}";
     		}
     	}
     }
@@ -158,7 +156,7 @@
 	      <th>글쓴이</th>
 	      <td>${vo.name}</td>
 	      <th>글쓴날짜</th>
-	      <td>${vo.wDate}</td>
+	      <td>${fn:substring(vo.wDate,0,fn:length(vo.wDate)-2)}</td>
 	    </tr>
 	    <tr>
 	      <th>Email</th>
@@ -172,35 +170,54 @@
 	      <th>좋아요</th>
 	      <td><!-- 이모지호출(윈도우키+'.')  -->
 	        <%-- 1.<input type="button" value="❤" onclick="goodCheck()"/> ${vo.good} &nbsp; &nbsp; &nbsp; --%>
-	        1.<a href="javascript:goodCheck()">❤</a> &nbsp; &nbsp; &nbsp;
-	        2.<input type="button" value="👍" onclick="goodCheck2()"/> ${vo.good} &nbsp; &nbsp; &nbsp;
-	        3.<input type="button" value="🧡" onclick="goodCheck3()"/> ${vo.good} &nbsp; &nbsp; &nbsp;
-	        4.<input type="button" value="❤" onclick="goodCheck4()"/> ${vo.good}
+	        <%-- 2.<input type="button" value="👍" onclick="goodCheck2()"/> ${vo.good} &nbsp; &nbsp; &nbsp; --%>
+	        1.<a href="javascript:goodCheck()">❤</a> &nbsp; &nbsp;
+	        2.<a href="javascript:goodCheck2()">👍</a> &nbsp; &nbsp;
+	        3.<input type="button" value="🧡" onclick="goodCheck3()"/> &nbsp; &nbsp;
+	        4.<input type="button" value="❤" onclick="goodCheck4()"/>  &nbsp;:  &nbsp;<font color="red"><b>${vo.good}</b></font>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>글제목</th>
-	      <td colspan="3">${vo.title}</td>
+	      <td colspan="3" style="text-align:left;">${vo.title}</td>
 	    </tr>
 	    <tr>
 	      <th>글내용</th>
-	      <td colspan="3" style="height:200px">${fn:replace(vo.content,newLine,"<br/>")}</td>
+	      <td colspan="3" style="height:200px; text-align:left;">${fn:replace(vo.content,newLine,"<br/>")}</td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
-	      <td colspan="3"><input type="password" name="pwd"/></td>
+	      <td colspan="3" style="text-align:left;"><input type="password" name="pwd"/></td>
 	    </tr>
 	    <tr>
 	      <td colspan="4" style="text-align:center;">
 	        <input type="button" value="수정" onclick="updCheck()" class="btn btn-secondary"/> &nbsp;
 	        <input type="button" value="삭제" onclick="delCheck()" class="btn btn-secondary"/> &nbsp;
-	        <input type="button" value="돌아가기" onclick="location.href='${ctp}/bList.bo';" class="btn btn-secondary"/>
+	        <input type="button" value="돌아가기" onclick="location.href='${ctp}/bList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
 	      </td>
 	    </tr>
 	  </table>
   </form>
-  <p><br/></p>
+  <p></p>
 </div>
+
+<!-- 이전글/다음글 처리 -->
+<div class="container">
+  <table class="table table-borderless">
+    <tr>
+      <td style="text-align:left;">
+        <c:if test="${nextVo.nextIdx != 0}">
+        	👆 <a href="${ctp}/bContent.bo?idx=${nextVo.nextIdx}&pag=${pag}&pageSize=${pageSize}">다음글 : ${nextVo.nextTitle}</a><br/>
+        </c:if>
+        <c:if test="${preVo.preIdx != 0}">
+	        👇 <a href="${ctp}/bContent.bo?idx=${preVo.preIdx}&pag=${pag}&pageSize=${pageSize}">이전글 : ${preVo.preTitle}</a><br/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+</div>
+<p></p>
+
 <!-- 아래로 댓글 처리(출력/입력) -->
 <div class="container">
   <!-- 댓글 출력처리 -->
@@ -217,16 +234,20 @@
 	        <c:if test="${rVo.mid == smid}">
 	          (<a href="javascript:replyDelCheck(${rVo.idx});">삭제</a>)
 	        </c:if>
+	        <c:if test="${rVo.wNdate <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
 	      </td>
-	      <td>${fn:replace(rVo.content,newLine,"<br/>")}</td>
-	      <td>${rVo.wDate}</td>
+	      <td style="text-align:left;">${fn:replace(rVo.content,newLine,"<br/>")}</td>
+	      <td>
+	        <c:if test="${rVo.wNdate > 24}">${fn:substring(rVo.wDate,0,10)}</c:if>
+          <c:if test="${rVo.wNdate <= 24}">${fn:substring(rVo.wDate,11,19)}</c:if>
+	      </td>
 	      <td>${rVo.hostIp}</td>
 	    </tr>
     </c:forEach>
   </table>
   
   <!-- 댓글 입력처리 -->
-  <form name="replyForm" method="post" action="${ctp}/bReplyInput.bo">
+  <form name="replyForm" method="post" action="${ctp}/bReplyInput.bo?pag=${pag}">
     <table class="table">
       <tr>
         <td style="text-align:left; width:90%">

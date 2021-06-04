@@ -51,6 +51,8 @@ public class MController extends HttpServlet {
 			viewPage = "/WEB-INF/message/message.jsp";
 		}
 		else if(com.equals("/memberMain")) {
+			command = new MemberMainCommand();
+			command.execute(request, response);
 			viewPage = "/WEB-INF/member/memberMain.jsp";
 		}
 		else if(com.equals("/mUpdate")) {

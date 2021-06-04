@@ -41,7 +41,8 @@ public class BoardDAO {
 	public List<BoardVO> bList(int startIndexNo, int pageSize) {
 		List<BoardVO> vos = new ArrayList<BoardVO>();
 		try {
-			sql = "select * from board order by idx desc limit ?, ?";
+			/* sql = "select * from board order by idx desc limit ?, ?"; */
+			sql = "select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount  from board order by idx desc limit ?, ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, startIndexNo);
 			pstmt.setInt(2, pageSize);
@@ -80,6 +81,9 @@ public class BoardDAO {
 				vo.setHostIp(rs.getString("hostIp"));
 				vo.setGood(rs.getInt("good"));
 				vo.setContent(rs.getString("content"));
+				
+				// 댓글수 처리
+				vo.setReplyCount(rs.getInt("replyCount"));
 				
 				vos.add(vo);
 			}
@@ -276,7 +280,13 @@ public class BoardDAO {
 				rVo.setIdx(rs.getInt("idx"));
 				rVo.setMid(rs.getString("mid"));
 				rVo.setNickName(rs.getString("nickName"));
+				
+  			// 1일전은 시간으로 1일 이후는 날짜로 화면에 표시하기위함
 				rVo.setwDate(rs.getString("wDate"));
+				TimeDiff timeDiff = new TimeDiff();
+				int wNdate = timeDiff.timeDiff(rs.getString("wDate"));
+				rVo.setwNdate(wNdate);
+				
 				rVo.setHostIp(rs.getString("hostIp"));
 				rVo.setContent(rs.getString("content"));
 				
@@ -303,6 +313,119 @@ public class BoardDAO {
 			getConn.pstmtClose();
 		}
 		
+	}
+
+	// 검색기 처리루틴(글제목, 글쓴이, 글내용)
+	public List<BoardVO> getBSearch(String search, String searchString, int startIndexNo, int pageSize) {
+		List<BoardVO> vos = new ArrayList<BoardVO>();
+		try {
+			//sql = "select * from board where " + search + " like ? order by idx desc limit ?, ?";
+			sql = "select * from board where " + search + " like ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+searchString+"%");
+//			pstmt.setInt(2, startIndexNo);
+//			pstmt.setInt(3, pageSize);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new BoardVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setName(rs.getString("name"));
+				vo.setTitle(rs.getString("title"));
+				vo.setEmail(rs.getString("email"));
+				vo.setPwd(rs.getString("pwd"));
+				
+				vo.setwDate(rs.getString("wDate"));   // 날짜필드를 날짜형식 자료
+				vo.setwCdate(rs.getString("wDate"));  // 날짜필드를 문자형식의 자료
+				TimeDiff timeDiff = new TimeDiff();		// 날짜를 시간형식으로 계산하기 위한 메소드 생성
+				int res = timeDiff.timeDiff(vo.getwCdate());  // 시간형식으로계산된 정수값(시간)을 받아온다.
+				vo.setwNdate(res);  // 시간차를 숫자형식으로 저장..
+				
+				vo.setReadNum(rs.getInt("readNum"));
+				vo.setHostIp(rs.getString("hostIp"));
+				vo.setGood(rs.getInt("good"));
+				vo.setContent(rs.getString("content"));
+				
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return vos;
+	}
+
+	// '이전글/다음글'에 대한 검색 처리
+	public BoardVO preNextSearch(String str, int idx) {
+		vo = new BoardVO();
+		try {
+			if(str.equals("pre")) {
+				sql = "select * from board where idx < ? order by idx desc limit 1";  // 이전글
+			}
+			else {
+				sql = "select * from board where idx > ? limit 1";		// 다음글
+			}
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			rs = pstmt.executeQuery();
+			
+			if(str.equals("pre") && rs.next()) {
+				vo.setPreIdx(rs.getInt("idx"));
+				vo.setPreTitle(rs.getString("title"));
+			}
+			else if(str.equals("next") && rs.next()) {
+				vo.setNextIdx(rs.getInt("idx"));
+				vo.setNextTitle(rs.getString("title"));
+			}
+			else {
+				vo.setPreIdx(0);
+				vo.setNextIdx(0);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return vo;
+	}
+
+	// 사용자가 올린 게시글 목록 가져오기
+	public List<BoardVO> getMyBoard(String snickName) {
+		List<BoardVO> vos = new ArrayList<BoardVO>();
+		try {
+			sql = "select * from board where name = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, snickName);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new BoardVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setName(rs.getString("name"));
+				vo.setTitle(rs.getString("title"));
+				vo.setEmail(rs.getString("email"));
+				vo.setPwd(rs.getString("pwd"));
+				
+				vo.setwDate(rs.getString("wDate"));   // 날짜필드를 날짜형식 자료
+				vo.setwCdate(rs.getString("wDate"));  // 날짜필드를 문자형식의 자료
+				TimeDiff timeDiff = new TimeDiff();		// 날짜를 시간형식으로 계산하기 위한 메소드 생성
+				int res = timeDiff.timeDiff(vo.getwCdate());  // 시간형식으로계산된 정수값(시간)을 받아온다.
+				vo.setwNdate(res);  // 시간차를 숫자형식으로 저장..
+				
+				vo.setReadNum(rs.getInt("readNum"));
+				vo.setHostIp(rs.getString("hostIp"));
+				vo.setGood(rs.getInt("good"));
+				vo.setContent(rs.getString("content"));
+				
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return vos;
 	}
 
 }

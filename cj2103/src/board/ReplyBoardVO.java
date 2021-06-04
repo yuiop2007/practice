@@ -9,6 +9,8 @@ public class ReplyBoardVO {
 	private String hostIp;
 	private String content;
 	
+	private int wNdate;
+	
 	public int getIdx() {
 		return idx;
 	}
@@ -51,9 +53,15 @@ public class ReplyBoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public int getwNdate() {
+		return wNdate;
+	}
+	public void setwNdate(int wNdate) {
+		this.wNdate = wNdate;
+	}
 	@Override
 	public String toString() {
 		return "ReplyBoardVO [idx=" + idx + ", boardIdx=" + boardIdx + ", mid=" + mid + ", nickName=" + nickName
-				+ ", wDate=" + wDate + ", hostIp=" + hostIp + ", content=" + content + "]";
+				+ ", wDate=" + wDate + ", hostIp=" + hostIp + ", content=" + content + ", wNdate=" + wNdate + "]";
 	}
 }

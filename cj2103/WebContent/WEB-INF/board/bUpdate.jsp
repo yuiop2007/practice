@@ -92,12 +92,14 @@
         <td colspan="2" style="text-align:center">
           <input type="button" value="글수정하기" onclick="fCheck()" class="btn btn-secondary"/> &nbsp;
           <input type="reset" value="다시쓰기" class="btn btn-secondary"/> &nbsp;
-          <input type="button" value="돌아가기" onclick="location.href='${ctp}/bList.bo';" class="btn btn-secondary"/>
+          <input type="button" value="돌아가기" onclick="location.href='${ctp}/bList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
         </td>
       </tr>
     </table>
     <input type="hidden" name="hostIp" value="${pageContext.request.remoteAddr}"/>
     <input type="hidden" name="idx" value="${vo.idx}"/>
+    <input type="hidden" name="pag" value="${pag}"/>
+    <input type="hidden" name="pageSize" value="${pageSize}"/>
   </form>
   <p><br/></p>
 </div>

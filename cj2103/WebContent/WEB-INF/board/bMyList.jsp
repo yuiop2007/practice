@@ -6,7 +6,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>bList.jsp</title>
+  <title>bMyList.jsp(개별자료 전체 리스트)</title>
   <jsp:include page="/include/bs.jsp"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
   <script>
@@ -42,7 +42,7 @@
   <form name="pageForm">
 	  <table class="table table-borderless">
 	    <tr>
-	      <td colspan="3"><h2>게 시 판 리 스 트</h2></td>
+	      <td colspan="3"><h2>게 시 판 리 스 트(<font color="blue">${snickname}</font>)</h2></td>
 	    </tr>
 	    <tr>
 	      <td style="text-align:left;padding:10px 0px">

@@ -16,6 +16,15 @@ public class BoardVO {
 	private String wCdate;
 	private int wNdate;
 	
+	// 댓글수를 위한 변수
+	private int replyCount;
+	
+	// 이전글/다음글을 위한 변수
+	private int preIdx;
+	private int nextIdx;
+	private String preTitle;
+	private String nextTitle;
+	
 	public BoardVO() {}
 	
 	public BoardVO(int idx, String name, String title, String email, String pwd, String wDate, int readNum, String hostIp, int good, String content) {
@@ -103,11 +112,42 @@ public class BoardVO {
 	public void setwNdate(int wNdate) {
 		this.wNdate = wNdate;
 	}
+	public int getReplyCount() {
+		return replyCount;
+	}
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	public int getPreIdx() {
+		return preIdx;
+	}
+	public void setPreIdx(int preIdx) {
+		this.preIdx = preIdx;
+	}
+	public int getNextIdx() {
+		return nextIdx;
+	}
+	public void setNextIdx(int nextIdx) {
+		this.nextIdx = nextIdx;
+	}
+	public String getPreTitle() {
+		return preTitle;
+	}
+	public void setPreTitle(String preTitle) {
+		this.preTitle = preTitle;
+	}
+	public String getNextTitle() {
+		return nextTitle;
+	}
+	public void setNextTitle(String nextTitle) {
+		this.nextTitle = nextTitle;
+	}
 
 	@Override
 	public String toString() {
 		return "BoardVO [idx=" + idx + ", name=" + name + ", title=" + title + ", email=" + email + ", pwd=" + pwd
 				+ ", wDate=" + wDate + ", readNum=" + readNum + ", hostIp=" + hostIp + ", good=" + good + ", content=" + content
-				+ ", wCdate=" + wCdate + ", wNdate=" + wNdate + "]";
+				+ ", wCdate=" + wCdate + ", wNdate=" + wNdate + ", replyCount=" + replyCount + ", preIdx=" + preIdx
+				+ ", nextIdx=" + nextIdx + ", preTitle=" + preTitle + ", nextTitle=" + nextTitle + "]";
 	}
 }

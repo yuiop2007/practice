@@ -15,6 +15,8 @@ public class BReplyInputCommand implements BInterface {
 		String nickName = request.getParameter("nickName")==null ? "" : request.getParameter("nickName");
 		String hostIp = request.getParameter("hostIp")==null ? "" : request.getParameter("hostIp");
 		String content = request.getParameter("content")==null ? "" : request.getParameter("content");
+		String pag = request.getParameter("pag")==null ? "" : request.getParameter("pag");
+		String pageSize = request.getParameter("pageSize")==null ? "" : request.getParameter("pageSize");
 		
 		ReplyBoardVO rVo = new ReplyBoardVO();
 
@@ -28,7 +30,7 @@ public class BReplyInputCommand implements BInterface {
 		dao.bReplyInput(rVo);
 		
 		request.setAttribute("msg", "bReplyBoardOk");
-		request.setAttribute("url", request.getContextPath()+"/bContent.bo?idx="+boardIdx);
+		request.setAttribute("url", request.getContextPath()+"/bContent.bo?idx="+boardIdx+"&pag="+pag+"&pageSize="+pageSize);
 	}
 
 }

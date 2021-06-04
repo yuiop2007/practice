@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import member.MemberMainCommand;
+
 @WebServlet("*.bo")
 public class BController extends HttpServlet{
 	@Override
@@ -78,6 +80,16 @@ public class BController extends HttpServlet{
 			command = new BReplyInputCommand();
 			command.execute(request, response);
 			viewPage = "/WEB-INF/message/message.jsp";
+		}
+		else if(com.equals("/bSearch")) {
+			command = new BSearchCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/board/bSearch.jsp";
+		}
+		else if(com.equals("/bMyList")) {
+			command = new BMyListCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/board/bMyList.jsp";
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
