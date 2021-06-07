@@ -45,6 +45,7 @@ select count(*) from replyBoard;
 select count(*) from replyBoard where boardIdx = 17;
 
 select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount  from board order by idx desc limit 0, 5;
+select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount from board where name = '홍장군' order by idx desc limit 0, 5;
 
 
 ------- 날짜 함수 연습 ---------------------------------------------------------------

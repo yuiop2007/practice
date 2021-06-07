@@ -54,6 +54,14 @@
     	msg = "게시글이 삭제처리 되었습니다.";
     else if(msg == "bReplyBoardOk")
     	msg = "댓글이 입력 되었습니다.";
+    else if(msg == "upLoadOk1Ok")
+    	msg = "파일이 업로드 되었습니다.";
+    else if(msg == "upLoadOk1No")
+    	msg = "파일 업로드 실패~~~~";
+    else if(msg == "ptDeleteOk")
+    	msg = "파일 삭제 성공!!!";
+    else if(msg == "ptDeleteOk")
+    	msg = "파일 삭제 실패~~~";
     
     
     

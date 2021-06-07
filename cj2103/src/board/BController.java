@@ -91,6 +91,11 @@ public class BController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/WEB-INF/board/bMyList.jsp";
 		}
+		else if(com.equals("/bMyContent")) {
+			command = new BMyContentCommand();
+			command.execute(request, response);
+			viewPage = "/WEB-INF/board/bMyContent.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

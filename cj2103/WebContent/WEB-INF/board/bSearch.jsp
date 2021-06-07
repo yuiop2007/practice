@@ -38,7 +38,7 @@
       <td colspan="2">
         <h2>게 시 판 검 색 리 스 트</h2>
         <br/>
-        (<font color="blue"><b>${search}</b></font>(으)로 <font color="red"><b>${searchString}</b></font>(을)를 검색한 결과 <font color="blue"><b>${searchCount}</b></font>건이 검색되었습니다.)
+        (<font color="blue"><b>${searchTitle}</b></font>(으)로 <font color="red"><b>${searchString}</b></font>(을)를 검색한 결과 <font color="blue"><b>${searchCount}</b></font>건이 검색되었습니다.)
       </td>
     </tr>
     <tr>
@@ -47,11 +47,11 @@
       </td>
       <td style="text-align:right;margin:0px;padding:0px;">
         <!-- 페이징처리 -->
-        <c:if test="${pag != 1}"><a href="bSearch.bo?pag=1&pageSize=${pageSize}" title="첫페이지로">◀</a></c:if>
-        <c:if test="${pag != 1}"><a href="bSearch.bo?pag=${pag-1}&pageSize=${pageSize}">◁</a></c:if>
+        <c:if test="${pag != 1}"><a href="bSearch.bo?pag=1&pageSize=${pageSize}&search=${search}&searchString=${searchString}" title="첫페이지로">◀</a></c:if>
+        <c:if test="${pag != 1}"><a href="bSearch.bo?pag=${pag-1}&pageSize=${pageSize}&search=${search}&searchString=${searchString}">◁</a></c:if>
         ${pag}Page / ${totPage}Pages
-        <c:if test="${pag != totPage}"><a href="bSearch.bo?pag=${pag+1}&pageSize=${pageSize}">▷</a></c:if>
-        <c:if test="${pag != totPage}"><a href="bSearch.bo?pag=${totPage}&pageSize=${pageSize}" title="마지막페이지로">▶</a></c:if>
+        <c:if test="${pag != totPage}"><a href="bSearch.bo?pag=${pag+1}&pageSize=${pageSize}&search=${search}&searchString=${searchString}">▷</a></c:if>
+        <c:if test="${pag != totPage}"><a href="bSearch.bo?pag=${totPage}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" title="마지막페이지로">▶</a></c:if>
         <!-- 페이징처리 -->
       </td>
     </tr>
@@ -71,6 +71,7 @@
 	      <td style="text-align:left;">
 	        <a href="${ctp}/bContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}">${vo.title}</a>
 	        <c:if test="${vo.wNdate <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
+	        <c:if test="${vo.replyCount != 0}">(${vo.replyCount})</c:if>
 	      </td>
 	      <td>${vo.name}</td>
 	      <td>
@@ -89,22 +90,22 @@
   <ul class="pagination justify-content-center">
 	  <c:set var="startPageNum" value="${pag - (pag-1)%blockSize}"/>  <!-- 해당블록의 시작페이지 구하기 -->
 	  <c:if test="${pag != 1}">
-	    <li class="page-item"><a href="bSearch.bo?pag=1&pageSize=${pageSize}" class="page-link" style="color:#666">◁◁</a></li>
-	    <li class="page-item"><a href="bSearch.bo?pag=${pag-1}&pageSize=${pageSize}" class="page-link" style="color:#666">◀</a></li>
+	    <li class="page-item"><a href="bSearch.bo?pag=1&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link" style="color:#666">◁◁</a></li>
+	    <li class="page-item"><a href="bSearch.bo?pag=${pag-1}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link" style="color:#666">◀</a></li>
 	  </c:if>
 	  <c:forEach var="i" begin="0" end="${blockSize-1}"> <!-- 블록의 크기만큼 돌려준다. -->
 	    <c:if test="${(startPageNum+i) <= totPage}">
 		  	<c:if test="${pag == (startPageNum+i)}">
-		  	  <li class="page-item active"><a href="bSearch.bo?pag=${startPageNum+i}&pageSize=${pageSize}" class="page-link btn btn-secondary active" style="color:#666"><font color="#fff">${startPageNum+i}</font></a></li>
+		  	  <li class="page-item active"><a href="bSearch.bo?pag=${startPageNum+i}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link btn btn-secondary active" style="color:#666"><font color="#fff">${startPageNum+i}</font></a></li>
 		  	</c:if>
 		  	<c:if test="${pag != (startPageNum+i)}">
-		  	  <li class="page-item"><a href="bSearch.bo?pag=${startPageNum+i}&pageSize=${pageSize}" class="page-link" style="color:#666">${startPageNum+i}</a></li>
+		  	  <li class="page-item"><a href="bSearch.bo?pag=${startPageNum+i}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link" style="color:#666">${startPageNum+i}</a></li>
 		  	</c:if>
 	  	</c:if>
 	  </c:forEach>
 	  <c:if test="${pag != totPage}">
-	    <li class="page-item"><a href="bSearch.bo?pag=${pag+1}&pageSize=${pageSize}" class="page-link" style="color:#666">▶</a></li>
-	    <li class="page-item"><a href="bSearch.bo?pag=${totPage}&pageSize=${pageSize}" class="page-link" style="color:#666">▷▷</a></li>
+	    <li class="page-item"><a href="bSearch.bo?pag=${pag+1}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link" style="color:#666">▶</a></li>
+	    <li class="page-item"><a href="bSearch.bo?pag=${totPage}&pageSize=${pageSize}&search=${search}&searchString=${searchString}" class="page-link" style="color:#666">▷▷</a></li>
 	  </c:if>
   </ul>
 </div>
@@ -116,7 +117,7 @@
     <b>검색 : </b>
     <select name="search" onchange="sChange()">
     	<option value="title" selected>글제목</option>
-    	<option value="nickName">글쓴이</option>
+    	<option value="name">글쓴이</option>
     	<option value="content">글내용</option>
     </select>
     <input type="text" name="searchString"/>

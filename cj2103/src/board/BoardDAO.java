@@ -21,11 +21,18 @@ public class BoardDAO {
 	BoardVO vo = null;
 
 	// 총 레코드 건수
-	public int totRecCnt() {
+	public int totRecCnt(String str) {
 		int totRecCnt = 0;
 		try {
-			sql = "select count(*) from board";
-			pstmt = conn.prepareStatement(sql);
+			if(str.equals("") || str == null) {
+				sql = "select count(*) from board";
+				pstmt = conn.prepareStatement(sql);
+			}
+			else {
+				sql = "select count(*) from board where name = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, str);
+			}
 			rs = pstmt.executeQuery();
 			rs.next();
 			totRecCnt = rs.getInt(1);
@@ -319,12 +326,11 @@ public class BoardDAO {
 	public List<BoardVO> getBSearch(String search, String searchString, int startIndexNo, int pageSize) {
 		List<BoardVO> vos = new ArrayList<BoardVO>();
 		try {
-			//sql = "select * from board where " + search + " like ? order by idx desc limit ?, ?";
-			sql = "select * from board where " + search + " like ? order by idx desc";
+			sql = "select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount from board where " + search + " like ? order by idx desc limit ?, ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, "%"+searchString+"%");
-//			pstmt.setInt(2, startIndexNo);
-//			pstmt.setInt(3, pageSize);
+			pstmt.setInt(2, startIndexNo);
+			pstmt.setInt(3, pageSize);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -345,6 +351,9 @@ public class BoardDAO {
 				vo.setHostIp(rs.getString("hostIp"));
 				vo.setGood(rs.getInt("good"));
 				vo.setContent(rs.getString("content"));
+				
+			  // 댓글수 처리
+				vo.setReplyCount(rs.getInt("replyCount"));
 				
 				vos.add(vo);
 			}
@@ -390,13 +399,16 @@ public class BoardDAO {
 		return vo;
 	}
 
-	// 사용자가 올린 게시글 목록 가져오기
-	public List<BoardVO> getMyBoard(String snickName) {
+	// 사용자가 올린 게시글 목록만 가져오기
+	public List<BoardVO> getMyBoard(String nickName, int startIndexNo, int pageSize) {
 		List<BoardVO> vos = new ArrayList<BoardVO>();
 		try {
-			sql = "select * from board where name = ?";
+			// sql = "select * from board where name = ? order by idx desc limit ?, ?";
+			sql = "select *, (select count(*) from replyBoard where boardIdx = board.idx) as replyCount from board where name = ? order by idx desc limit ?, ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, snickName);
+			pstmt.setString(1, nickName);
+			pstmt.setInt(2, startIndexNo);
+			pstmt.setInt(3, pageSize);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -418,6 +430,9 @@ public class BoardDAO {
 				vo.setGood(rs.getInt("good"));
 				vo.setContent(rs.getString("content"));
 				
+			  // 댓글수 처리
+				vo.setReplyCount(rs.getInt("replyCount"));
+				
 				vos.add(vo);
 			}
 		} catch (SQLException e) {
@@ -426,6 +441,24 @@ public class BoardDAO {
 			getConn.rsClose();
 		}
 		return vos;
+	}
+
+	// 검색기에 주어진 조건에 따른 건수 세기..
+	public int totRecCnt(String search, String searchString) {
+		int totRecCnt = 0;
+		try {
+			sql = "select count(*) from board where " + search + " like ? order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+searchString+"%");
+			rs = pstmt.executeQuery();
+			rs.next();
+			totRecCnt = rs.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("SQL Error : " + e.getMessage());
+		} finally {
+			getConn.rsClose();
+		}
+		return totRecCnt;
 	}
 
 }

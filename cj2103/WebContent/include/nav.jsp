@@ -65,6 +65,7 @@
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/urlMapping.um">URL 매핑</a>
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/password">비밀번호암호화</a>
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/jstl.st">JSTL</a>
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/upLoad1.pt">PdsTest1</a>
 	      </div>
 	    </li> 
 <%      } %>

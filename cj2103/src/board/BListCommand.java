@@ -16,7 +16,7 @@ public class BListCommand implements BInterface {
 		// 페이징 처리를 위한 준비
 		int pag = request.getParameter("pag")==null ? 1 : Integer.parseInt(request.getParameter("pag"));
 		int pageSize = request.getParameter("pageSize")==null ? 5 : Integer.parseInt(request.getParameter("pageSize"));
-		int totRecCnt = dao.totRecCnt();
+		int totRecCnt = dao.totRecCnt("");
 		int totPage = (totRecCnt % pageSize)==0 ? totRecCnt / pageSize : (int)(totRecCnt / pageSize) +1;
 		int startIndexNo = (pag - 1) * pageSize;
 	  int curScrStartNo = totRecCnt - startIndexNo;

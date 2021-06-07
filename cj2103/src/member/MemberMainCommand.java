@@ -16,15 +16,16 @@ public class MemberMainCommand implements MInterface {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		String snickName = (String) session.getAttribute("snickname");
+		String nickName = (String) session.getAttribute("snickname");
 		
 		
 		BoardDAO dao = new BoardDAO();
 		
-		List<BoardVO> vos = dao.getMyBoard(snickName);
+		//List<BoardVO> vos = dao.getMyBoard(snickName);
+		int totRecCnt = dao.totRecCnt(nickName);
 		
 		/* request.setAttribute("vos", vos); */
-		request.setAttribute("bMyCount", vos.size());
+		request.setAttribute("bMyCount", totRecCnt);
 		
 		
 

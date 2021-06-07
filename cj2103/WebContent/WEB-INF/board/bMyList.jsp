@@ -10,25 +10,16 @@
   <jsp:include page="/include/bs.jsp"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
   <script>
-    function sChange() {
-    	searchForm.searchString.focus();
-    }
-    
-    function sCheck() {
-    	var searchString = searchForm.searchString.value;
-    	if(searchString == "") {
-    		alert("검색어를 입력하세요");
-    		searchForm.searchString.focus();
-    	}
-    	else {
-    		searchForm.submit();
-    	}
-    }
-    
     // 페이지사이즈 처리
     function pageCheck() {
     	var pageSize = pageForm.pageSize.value;
-    	location.href = "${ctp}/bList.bo?pag=${pag}&pageSize="+pageSize;
+    	location.href = "${ctp}/bMyList.bo?pag=${pag}&pageSize="+pageSize;
+    }
+    
+    // 게시글 내용 새창으로 보기
+    function nWin(idx) {
+    	url = "${ctp}/bMyContent.bo?idx="+idx;
+    	window.open(url,"myWin","width=770px, height=800px");
     }
   </script>
   <style>
@@ -42,27 +33,17 @@
   <form name="pageForm">
 	  <table class="table table-borderless">
 	    <tr>
-	      <td colspan="3"><h2>게 시 판 리 스 트(<font color="blue">${snickname}</font>)</h2></td>
+	      <td colspan="2"><h2><font color="blue">${snickname}</font>님이 게시한 글</h2></td>
 	    </tr>
 	    <tr>
-	      <td style="text-align:left;padding:10px 0px">
-	        <input type="button" value="글올리기" onclick="location.href='${ctp}/bInput.bo';" class="btn btn-secondary"/>
-	      </td>
-	      <td>
-	        <select name="pageSize" onchange="pageCheck()" style="text-align:left;padding:5px 0px;">
-	          <option value="5"  ${pageSize==5  ? 'selected' : ''}>5건</option>
-	          <option value="10" ${pageSize==10 ? 'selected' : ''}>10건</option>
-	          <option value="15" ${pageSize==15 ? 'selected' : ''}>15건</option>
-	          <option value="20" ${pageSize==20 ? 'selected' : ''}>20건</option>
-	        </select>
-	      </td>
-	      <td style="text-align:right;margin:0px;padding:0px;width:80%;">
+	      <td style="margin:0px; padding:0px;">총 <font color="blue">${totRecCnt}</font>건</td>
+	      <td style="text-align:right;margin:0px;padding:0px;width:90%;">
 	        <!-- 페이징처리 -->
-	        <c:if test="${pag != 1}"><a href="bList.bo?pag=1&pageSize=${pageSize}" title="첫페이지로">◀</a></c:if>
-	        <c:if test="${pag != 1}"><a href="bList.bo?pag=${pag-1}&pageSize=${pageSize}">◁</a></c:if>
+	        <c:if test="${pag != 1}"><a href="bMyList.bo?pag=1" title="첫페이지로">◀</a></c:if>
+	        <c:if test="${pag != 1}"><a href="bMyList.bo?pag=${pag-1}">◁</a></c:if>
 	        ${pag}Page / ${totPage}Pages
-	        <c:if test="${pag != totPage}"><a href="bList.bo?pag=${pag+1}&pageSize=${pageSize}">▷</a></c:if>
-	        <c:if test="${pag != totPage}"><a href="bList.bo?pag=${totPage}&pageSize=${pageSize}" title="마지막페이지로">▶</a></c:if>
+	        <c:if test="${pag != totPage}"><a href="bMyList.bo?pag=${pag+1}">▷</a></c:if>
+	        <c:if test="${pag != totPage}"><a href="bMyList.bo?pag=${totPage}" title="마지막페이지로">▶</a></c:if>
 	        <!-- 페이징처리 -->
 	      </td>
 	    </tr>
@@ -80,7 +61,7 @@
 		    <tr>
 		      <td>${curScrStartNo}</td>
 		      <td style="text-align:left;">
-		        <a href="${ctp}/bContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}">${vo.title}</a>
+		        <a href="javascript:nWin(${vo.idx})">${vo.title}</a>
 		        <c:if test="${vo.wNdate <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
 		        <c:if test="${vo.replyCount != 0}">(${vo.replyCount})</c:if>
 		      </td>
@@ -97,29 +78,6 @@
 	  </table>
   </form>
   <br/>
-  <!-- 블록페이징처리 시작 -->
-  <%-- 
-  <c:set var="startPageNum" value="${pag - (pag-1)%blockSize}"/>  <!-- 해당블록의 시작페이지 구하기 -->
-  <c:if test="${pag != 1}">
-    <a href="bList.bo?pag=1">◁◁</a>
-    <a href="bList.bo?pag=${pag-1}">◀</a>
-  </c:if>
-  <c:forEach var="i" begin="0" end="${blockSize-1}"> <!-- 블록의 크기만큼 돌려준다. -->
-    <c:if test="${(startPageNum+i) <= totPage}">
-	  	<c:if test="${pag == (startPageNum+i)}">
-	  	  [<font color="red"><b>${startPageNum+i}</b></font>]
-	  	</c:if>
-	  	<c:if test="${pag != (startPageNum+i)}">
-	  	  [<a href="bList.bo?pag=${startPageNum+i}">${startPageNum+i}</a>]
-	  	</c:if>
-  	</c:if>
-  </c:forEach>
-  <c:if test="${pag != totPage}">
-    <a href="bList.bo?pag=${pag+1}">▶</a>
-    <a href="bList.bo?pag=${totPage}">▷▷</a>
-  </c:if>
-   --%>
-  <!-- 블록페이징처리 끝 -->
 </div>
   
 <!-- 블록페이징처리 시작 -->
@@ -127,43 +85,27 @@
   <ul class="pagination justify-content-center">
 	  <c:set var="startPageNum" value="${pag - (pag-1)%blockSize}"/>  <!-- 해당블록의 시작페이지 구하기 -->
 	  <c:if test="${pag != 1}">
-	    <li class="page-item"><a href="bList.bo?pag=1&pageSize=${pageSize}" class="page-link" style="color:#666">◁◁</a></li>
-	    <li class="page-item"><a href="bList.bo?pag=${pag-1}&pageSize=${pageSize}" class="page-link" style="color:#666">◀</a></li>
+	    <li class="page-item"><a href="bMyList.bo?pag=1" class="page-link" style="color:#666">◁◁</a></li>
+	    <li class="page-item"><a href="bMyList.bo?pag=${pag-1}" class="page-link" style="color:#666">◀</a></li>
 	  </c:if>
 	  <c:forEach var="i" begin="0" end="${blockSize-1}"> <!-- 블록의 크기만큼 돌려준다. -->
 	    <c:if test="${(startPageNum+i) <= totPage}">
 		  	<c:if test="${pag == (startPageNum+i)}">
-		  	  <li class="page-item active"><a href="bList.bo?pag=${startPageNum+i}&pageSize=${pageSize}" class="page-link btn btn-secondary active" style="color:#666"><font color="#fff">${startPageNum+i}</font></a></li>
+		  	  <li class="page-item active"><a href="bMyList.bo?pag=${startPageNum+i}" class="page-link btn btn-secondary active" style="color:#666"><font color="#fff">${startPageNum+i}</font></a></li>
 		  	</c:if>
 		  	<c:if test="${pag != (startPageNum+i)}">
-		  	  <li class="page-item"><a href="bList.bo?pag=${startPageNum+i}&pageSize=${pageSize}" class="page-link" style="color:#666">${startPageNum+i}</a></li>
+		  	  <li class="page-item"><a href="bMyList.bo?pag=${startPageNum+i}" class="page-link" style="color:#666">${startPageNum+i}</a></li>
 		  	</c:if>
 	  	</c:if>
 	  </c:forEach>
 	  <c:if test="${pag != totPage}">
-	    <li class="page-item"><a href="bList.bo?pag=${pag+1}&pageSize=${pageSize}" class="page-link" style="color:#666">▶</a></li>
-	    <li class="page-item"><a href="bList.bo?pag=${totPage}&pageSize=${pageSize}" class="page-link" style="color:#666">▷▷</a></li>
+	    <li class="page-item"><a href="bMyList.bo?pag=${pag+1}" class="page-link" style="color:#666">▶</a></li>
+	    <li class="page-item"><a href="bMyList.bo?pag=${totPage}" class="page-link" style="color:#666">▷▷</a></li>
 	  </c:if>
   </ul>
 </div>
 <!-- 블록페이징처리 끝 -->
-<br/>
-<!-- 검색기 처리 시작 -->
-<div class="container" style="text-align:center">
-  <form name="searchForm" method="post" action="${ctp}/bSearch.bo">
-    <b>검색 : </b>
-    <select name="search" onchange="sChange()">
-    	<option value="title" selected>글제목</option>
-    	<option value="name">글쓴이</option>
-    	<option value="content">글내용</option>
-    </select>
-    <input type="text" name="searchString"/>
-    <input type="button" value="검 색" onclick="sCheck()"/>
-    <input type="hidden" name="pag" value="${pag}"/>
-    <input type="hidden" name="pageSize" value="${pageSize}"/>
-  </form>
-</div>
-<!-- 검색기 처리 끝 -->
+
 <p><br/></p>
 <jsp:include page="/include/footer.jsp"/>
 </body>
