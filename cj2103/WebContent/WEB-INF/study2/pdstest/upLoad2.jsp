@@ -92,11 +92,11 @@
   		<input type="file" name="fname1" id="fname1" class="form-control-file border"/>
   		<input type="file" name="fname2" id="fname2" class="form-control-file border"/>
   		<input type="file" name="fname3" id="fname3" class="form-control-file border"/>
-  		<input type="button" value="파일전송" class="btn btn-secondary" onclick="fCheck()"/>
+  		<input type="button" value="파일전송" class="btn btn-secondary form-control" onclick="fCheck()"/>
   	</div> 
   </form>
   <hr/><br/>
-  <p><a href="${ctp}/downLoad1.pt" class="btn btn-secondary">다운로드 폼으로 이동하기</a></p>
+  <p><a href="${ctp}/downLoad1.pt" class="btn btn-secondary form-control">다운로드 폼으로 이동하기</a></p>
   <p><br/></p>
 </div>
 <jsp:include page="/include/footer.jsp"/>

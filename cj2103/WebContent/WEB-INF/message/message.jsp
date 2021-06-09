@@ -62,6 +62,14 @@
     	msg = "파일 삭제 성공!!!";
     else if(msg == "ptDeleteOk")
     	msg = "파일 삭제 실패~~~";
+    else if(msg == "pInputOk")
+    	msg = "자료실 업로드 성공!";
+    else if(msg == "pInputNo")
+    	msg = "자료실 업로드 실패~";
+    else if(msg == "pPassCheckNo")
+    	msg = "비밀번호를 확인하세요~~";
+    else if(msg == "pPassCheckOk")
+    	msg = "자료파일 삭제 완료!!!";
     
     
     

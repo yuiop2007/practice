@@ -39,7 +39,7 @@ public class TimeDiff {
 		
 		// 5. 날짜형식으로 변경된 두자료(today, dateWdate)를 숫자형식(getTime)으로 변경 비교한다.(형식은 ms이다.)
 		// [오늘날짜(today) - DB날짜(dateWdate)]의 결과를 시간으로 변환....
-		long diffTime = (today.getTime() - dateWdate.getTime()) / (60 * 60 * 1000); 
+		long diffTime = ((today.getTime() - dateWdate.getTime()) / (60 * 60 * 1000)) + 1; 
 		int res = (int) diffTime;
 		
 		return res;

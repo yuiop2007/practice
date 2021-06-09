@@ -50,6 +50,9 @@ public class PtController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/WEB-INF/message/message.jsp";
 		}
+		else if(com.equals("/upLoad3")) {
+			viewPage = "/WEB-INF/study2/pdstest/upLoad3.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

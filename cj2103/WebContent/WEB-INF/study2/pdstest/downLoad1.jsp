@@ -48,10 +48,18 @@
 	    </tr>
 	  </c:forEach>
   </table>
-  <p>
-    <a href="${ctp}/upLoad1.pt" class="btn btn-secondary">업로드 폼1(싱글파일)으로 돌아가기</a> &nbsp;
-    <a href="${ctp}/upLoad2.pt" class="btn btn-secondary">업로드 폼2(멀티파일)으로 돌아가기</a>
-  </p>
+  <hr/>
+  <div class="row">
+    <div class="col">
+	    <a href="${ctp}/upLoad1.pt" class="btn btn-outline-secondary form-control">업로드 폼1(싱글파일)으로 돌아가기</a> &nbsp;
+	  </div>
+    <div class="col">
+	    <a href="${ctp}/upLoad2.pt" class="btn btn-outline-secondary form-control">업로드 폼2(멀티파일)으로 돌아가기</a> &nbsp;
+	  </div>
+    <div class="col">
+	    <a href="${ctp}/upLoad3.pt" class="btn btn-outline-secondary form-control">업로드 폼3(멀티파일)으로 돌아가기</a>
+	  </div>
+  </div>
   <p><br/></p>
 </div>
 <jsp:include page="/include/footer.jsp"/>

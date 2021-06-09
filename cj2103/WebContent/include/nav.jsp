@@ -39,7 +39,7 @@
       </li>
 <%      if(level != 1) { %>
       <li class="nav-item">
-        <a class="nav-link" href="#">Data</a>
+        <a class="nav-link" href="<%=request.getContextPath()%>/pList.pds">PDS</a>
 <%      } %>
       </li>
       <li class="nav-item dropdown">
@@ -66,6 +66,15 @@
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/password">비밀번호암호화</a>
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/jstl.st">JSTL</a>
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/upLoad1.pt">PdsTest1</a>
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/upLoad2.pt">PdsTest2</a>
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/upLoad3.pt">PdsTest3</a>
+	      </div>
+	    </li> &nbsp;&nbsp; 
+      <li class="nav-item dropdown">
+	      <a class="nav-link dropdown-toggle btn btn-secondary btn-sm btn-sub" href="#" id="navbardrop" data-toggle="dropdown">학습실2</a>
+	      <div class="dropdown-menu">
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/dynamicForm.st">동적폼 연습</a>
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/ariaTest">ARIA Test</a>
 	      </div>
 	    </li> 
 <%      } %>
