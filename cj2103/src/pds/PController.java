@@ -64,6 +64,11 @@ public class PController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/WEB-INF/message/message.jsp";
 		}
+		else if(com.equals("/pDownLoad")) {
+			command = new PDownLoadCommand();
+			command.execute(request, response);
+			//viewPage = "/WEB-INF/message/message.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

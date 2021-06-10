@@ -30,6 +30,9 @@ public class SController extends HttpServlet {
 		else if(com.equals("/dynamicForm")) {
 			viewPage = "/WEB-INF/study2/dynamicForm/dynamicForm.jsp";
 		}
+		else if(com.equals("/calendar")) {
+			viewPage = "/WEB-INF/study2/calendar/calendar.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

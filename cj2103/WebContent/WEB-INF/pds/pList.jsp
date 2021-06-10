@@ -16,6 +16,7 @@
     	var x = (window.screen.width)/2 - winX/2;
     	var y = (window.screen.height)/2 - winY/2;
     	window.open(url,"pdsWin","width="+winX+", height="+winY+", left="+x+", top="+y)
+    	//window.open(url,"pdsWin","width="+winX+", height="+winY);
     }
     
     function downCheck(idx) {
@@ -118,6 +119,7 @@
 	      <td>${vo.part}</td>
 	      <td>${vo.downNum}</td>
 	      <td>
+        	<a href="${ctp}/pDownLoad.pds?idx=${vo.idx}" class="btn btn-outline-secondary btn-sm">전체다운</a>
 	      	<c:if test="${smid == vo.mid || slevel == 0}">
 	        	<a href="javascript:pFDelete('${vo.idx}')" class="btn btn-outline-secondary btn-sm">삭제</a>
 	        </c:if>

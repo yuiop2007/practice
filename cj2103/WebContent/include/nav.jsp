@@ -41,7 +41,7 @@
       <li class="nav-item">
         <a class="nav-link" href="<%=request.getContextPath()%>/pList.pds">PDS</a>
 <%      } %>
-      </li>
+      </li> &nbsp;&nbsp;
       <li class="nav-item dropdown">
 	      <a class="nav-link dropdown-toggle btn btn-secondary btn-sm btn-sub" href="#" id="navbardrop" data-toggle="dropdown">My Page</a>
 	      <div class="dropdown-menu">
@@ -75,6 +75,7 @@
 	      <div class="dropdown-menu">
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/dynamicForm.st">동적폼 연습</a>
 	        <a class="dropdown-item" href="<%=request.getContextPath()%>/ariaTest">ARIA Test</a>
+	        <a class="dropdown-item" href="<%=request.getContextPath()%>/calendar.st">달력</a>
 	      </div>
 	    </li> 
 <%      } %>

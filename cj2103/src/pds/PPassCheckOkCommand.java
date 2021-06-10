@@ -53,7 +53,7 @@ public class PPassCheckOkCommand implements PInterface {
 			dao.pDelete(idx);
 			
 			request.setAttribute("msg", "pPassCheckOk");
-			request.setAttribute("url", request.getContextPath()+"/pList.pds?idx="+idx+"&pag="+pag);
+			request.setAttribute("url", request.getContextPath()+"/pList.pds");
 		}
 	}
 
